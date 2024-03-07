@@ -13,6 +13,8 @@
 #include <stdlib.h>
 #include <stdio.h>
 #include <time.h>
+#include <string.h> // Include this line to use strlen
+
 
 //function prototypes
 void printIntAsBinary(int source, int numBits); //function prototype
@@ -23,6 +25,15 @@ void showBinaryToDecimal(int source, int numBits);
 void practice8bit2sInts(void);
 void practice8bitSignMagInts(void);
 void practice8bit1sComplement(void);
+
+void practice8bit9sComplement(void);
+void practice8bit10sComplement(void);
+void practice8bit9sComplementArithmetic(void);
+
+int intToNinesComplement(int numberIn);
+int ninesComplementConvertSign(int);
+int randRange(int min, int max);
+
 
 
 float readBinFloat();
@@ -41,6 +52,10 @@ int main()
    	    printf("1 for 1's complement practice\n");
 		printf("2 for 2's complement practice\n");
 		printf("3 for sign magnitude practice\n");
+   	    printf("4 for 9's complement practice\n");
+		printf("5 for 10's complement practice\n");
+        printf("6 for 9's complement arithmetic practice\n");
+        printf("9 for 9's TEST\n");
      	printf("0 to Quit\n");
      	scanf("%d", &choice);
    
@@ -50,6 +65,15 @@ int main()
    			practice8bit2sInts();
 		}else 	if (choice == 3){
    			practice8bitSignMagInts();
+        } else if (choice == 4) {
+            practice8bit9sComplement();
+        } else if (choice == 5) {
+            practice8bit10sComplement();
+		} else if (choice == 6) {
+            practice8bit9sComplementArithmetic();
+        }// TODO: Test here
+        else 	if (choice == 9){
+   			printf("%d", randRange(100, 999));
 		}else 	if (choice == 0){
    			printf("Goodbye\n");
 		}
@@ -220,43 +244,6 @@ void eatLine()
 		; 
 }
 
-void practice8bit2sInts(void)
-{
-    int i, number, answer, num_correct = 0;
-    
-    for( i = 0; i < 10; ++i)
-    {
-    	number = rand()% 256 + -128;
-    	printf("What number does this 2's complement form represent? ");
-    	printIntAsBinary(number, 8);
-    	scanf("%d", &answer);
-    	if (answer == number){
-    		printf("Smart!\n");
-    		++num_correct;
-		}else{
-			printf("Sorry, the correct answer = %d, here is how\n", number);
-			printIntAsBinary(number, 8);
-			if (number >= 0){
-				printf("Since the leftmost bit is 0, this is a positive number.\n");
-				printf("The bits tell you the magnitude\n");
-			}else{
-				printf("Since the leftmost bit is 1, this is a negative number.\n");
-				
-				printf("You must first form the 1's complement (flip the bits)\n");
-				number = ~number;
-				printIntAsBinary(number, 8);
-				printf("Then add 1 to get the 2's complement\n");
-				number += 1;
-				printIntAsBinary(number, 8);
-			}
-			showBinaryToDecimal(number, 8);
-			printf("\n");
-	    }
-	}//for
-	printf("You got %d out of 10\n", num_correct);
-	
-}
-
 void practice8bitSignMagInts(void)
 {
     int i, number, number1, answer, num_correct = 0;
@@ -334,3 +321,211 @@ void practice8bit1sComplement(void)
 	printf("You got %d out of 10\n", num_correct);
 }
 
+void practice8bit2sInts(void)
+{
+    int i, number, answer, num_correct = 0;
+    
+    for( i = 0; i < 10; ++i)
+    {
+    	number = rand()% 256 + -128;
+    	printf("What number does this 2's complement form represent? ");
+    	printIntAsBinary(number, 8);
+    	scanf("%d", &answer);
+    	if (answer == number){
+    		printf("Smart!\n");
+    		++num_correct;
+		}else{
+			printf("Sorry, the correct answer = %d, here is how\n", number);
+			printIntAsBinary(number, 8);
+			if (number >= 0){
+				printf("Since the leftmost bit is 0, this is a positive number.\n");
+				printf("The bits tell you the magnitude\n");
+			}else{
+				printf("Since the leftmost bit is 1, this is a negative number.\n");
+				
+				printf("You must first form the 1's complement (flip the bits)\n");
+				number = ~number;
+				printIntAsBinary(number, 8);
+				printf("Then add 1 to get the 2's complement\n");
+				number += 1;
+				printIntAsBinary(number, 8);
+			}
+			showBinaryToDecimal(number, 8);
+			printf("\n");
+	    }
+	}//for
+	printf("You got %d out of 10\n", num_correct);	
+}
+
+// Function to convert an integer to its 9's complement
+int intToNinesComplement(int randomNumber) {
+    
+    // Convert integer to string
+    char numberString[8];
+    sprintf(numberString, "%d", randomNumber); 
+    
+    int numStrLength = strlen(numberString);
+    static char result[20]; // Assuming the maximum length of the resulting string won't exceed 20 characters
+    
+    // Calculate 9's complement
+    for (int i = 0; i < numStrLength; i++) {
+        result[i] = '9' - (numberString[i] - '0');
+    } 
+    result[numStrLength] = '\0'; // Null-terminate the string
+    
+    // Convert the resulting string back to an integer
+    int intResult = atoi(result); 
+    return intResult;
+}
+
+// Generates a number in range [lower, upper]
+int randRange(int lower, int upper) { 
+    int i; 
+    int num = (rand() % (upper - lower + 1)) + lower; 
+    return num;
+} 
+
+// calculate the number of digits in a number
+int numDigits(int number) {
+    char* digitsString;
+    int numDigitsInt;
+
+
+    sprintf(digitsString, "%d", number);
+
+    numDigitsInt = strlen(digitsString);
+    
+    return numDigitsInt;
+}
+
+int ninesComplementBigNumber (int randomNumber) {
+
+    // Convert integer to string
+    char numberString[8];
+    sprintf(numberString, "%d", randomNumber); 
+    
+    int numStrLength = strlen(numberString);
+    static char result[20]; // Assuming the maximum length of the resulting string won't exceed 20 characters
+    
+    // Calculate 9's complement
+    for (int i = 0; i < numStrLength; i++) {
+        // ASCII Code Subtraction for each index in the string
+        result[i] = '9' - (numberString[i] - '0');
+    } 
+    result[numStrLength] = '\0'; // Null-terminate the string
+    
+    // Convert the resulting string back to an integer
+    int intResult = atoi(result); 
+    return (intResult + randomNumber);
+
+}
+
+
+int ninesComplementConvertSign(int numberIn) { // TODO: this should take big number as a parameter
+    
+    int ninesComplement = 0;
+    int bigNumber = 0;
+
+    // figure out the number of digits the int is and create a 'big' 9 number out of it
+    bigNumber = ninesComplementBigNumber(numberIn);
+
+    if (numberIn > (bigNumber/2)) {
+        // if the number is bigNumber or greater convert it to negative 
+        ninesComplement = intToNinesComplement(numberIn);
+        return (ninesComplement * -1);
+    } else{
+        // just return the original number
+        return numberIn;
+    }
+}
+
+// Function to practice 9's complement
+void practice8bit9sComplement(void) {
+    int i, randomNumber, userAnswer, correctAnswer, num_correct = 0;
+
+    // Loop for 10 iterations
+    for (i = 0; i < 10; ++i) {
+        // Generate a random number
+        randomNumber = rand() % 256;
+        
+        printf("What number does this 9's complement form represent? \n");
+        printf("%d \n", randomNumber);
+        
+        // Read user's answer
+        scanf("%d", &userAnswer);
+        
+        // Get correct answer using 9's complement function
+        correctAnswer = intToNinesComplement(randomNumber);
+        
+        // Check user's answer against correct answer
+        if (correctAnswer == userAnswer) {
+            printf("Smart!\n");
+            ++num_correct;
+        } else {
+            printf("Sorry, the correct answer = %d\n", correctAnswer);
+        }
+    }
+    printf("You got %d out of 10\n", num_correct);
+}
+
+// Function to practice 10's complement
+void practice8bit10sComplement(void) {
+    int i, randomNumber, userAnswer, correctAnswer, num_correct = 0;
+
+    // Loop for 10 iterations
+    for (i = 0; i < 10; ++i) {
+        // Generate a random number
+        randomNumber = rand() % 256;
+        
+        printf("What number does this 10's complement form represent? \n");
+        printf("%d \n", randomNumber);
+        
+        // Read user's answer
+        scanf("%d", &userAnswer);
+        
+        // Get correct answer using 9's complement function
+        correctAnswer = intToNinesComplement(randomNumber);
+        
+        // Increment correct answer to simulate 10's complement
+        ++correctAnswer;
+        
+        // Check user's answer against correct answer
+        if (correctAnswer == userAnswer) {
+            printf("Smart!\n");
+            ++num_correct;
+        } else {
+            printf("Sorry, the correct answer = %d\n", correctAnswer);
+        }
+    }
+    printf("You got %d out of 10\n", num_correct);
+}
+
+// Function to practice 9's complement addition
+void practice8bit9sComplementArithmetic(void) {
+    int i, randomNumber, randomAddend, userAnswer, correctAnswer, num_correct = 0;
+
+    // Loop for 10 iterations
+    for (i = 0; i < 10; ++i) {
+        // Generate random number
+        randomNumber = rand() % 256;
+        randomAddend = rand() % 256;
+        
+        printf("What number does this 9's complement addition/subtraction equal? \n");
+        printf("%d + %d\n", randomNumber, randomAddend);
+        
+        // Read user's answer
+        scanf("%d", &userAnswer);
+        
+        // Get correct answer using 9's complement function
+        correctAnswer = ninesComplementConvertSign(randomNumber) + ninesComplementConvertSign(randomAddend);
+        
+        // Check user's answer against correct answer
+        if (correctAnswer == userAnswer) {
+            printf("Smart!\n");
+            ++num_correct;
+        } else {
+            printf("Sorry, the correct answer = %d\n", correctAnswer);
+        }
+    }
+    printf("You got %d out of 10\n", num_correct);
+}
