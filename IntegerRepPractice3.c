@@ -14,6 +14,7 @@
 #include <stdio.h>
 #include <time.h>
 #include <string.h> // Include this line to use strlen
+#include <math.h>
 
 
 //function prototypes
@@ -32,7 +33,7 @@ void practice8bit9sComplementArithmetic(void);
 
 int intToNinesComplement(int numberIn);
 int ninesComplementConvertSign(int);
-int randRange(int min, int max);
+int randRange(int numDigits);
 
 
 
@@ -72,9 +73,9 @@ int main()
 		} else if (choice == 6) {
             practice8bit9sComplementArithmetic();
         }// TODO: Test here
-        else 	if (choice == 9){
-   			printf("%d", randRange(100, 999));
-		}else 	if (choice == 0){
+        else if (choice == 9){
+   			printf("%d", randRange(2));
+		}else if (choice == 0){
    			printf("Goodbye\n");
 		}
    }while (choice != 0);
@@ -379,9 +380,13 @@ int intToNinesComplement(int randomNumber) {
 }
 
 // Generates a number in range [lower, upper]
-int randRange(int lower, int upper) { 
-    int i; 
+int randRange(int numDigits) { 
+    int upper, lower; 
+
+    upper = pow(10, numDigits) - 1;
+    lower = pow(10, numDigits - 1);
     int num = (rand() % (upper - lower + 1)) + lower; 
+
     return num;
 } 
 
@@ -502,13 +507,15 @@ void practice8bit10sComplement(void) {
 
 // Function to practice 9's complement addition
 void practice8bit9sComplementArithmetic(void) {
-    int i, randomNumber, randomAddend, userAnswer, correctAnswer, num_correct = 0;
-
+    int i, randomNumber, randomAddend, userAnswer, correctAnswer, digits = 0;
+    int num_correct = 0;
     // Loop for 10 iterations
     for (i = 0; i < 10; ++i) {
         // Generate random number
         randomNumber = rand() % 256;
-        randomAddend = rand() % 256;
+        digits = numDigits(randomNumber);
+        // use randRange and numDigits to figure out random addend
+        randomAddend = randRange(digits);
         
         printf("What number does this 9's complement addition/subtraction equal? \n");
         printf("%d + %d\n", randomNumber, randomAddend);
